@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Supplier>
+
+@{
+    ViewData["Title"] = "Supplier List";
+}
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+<h1>Supplier List</h1>
+
+<a class="btn btn-primary" asp-action="Create">Add New Supplier</a>
+
+<div>
+    <form method="get" class="form-inline mb-3">
+        <div class="form-group ">
+            <label for="Name">Name:</label>
+            <input type="text" name="Name" class="form-control ml-2" />
+        </div>
+        <div class="form-group ml-3">
+            <label for="CreatedAt">Created At:</label>
+            <input type="date" name="CreatedAt" class="form-control ml-2" />
+        </div>
+		<button type="submit" class="btn btn-secondary mt-3">Filter</button> 
+        <button class="btn btn-secondary mt-3" onclick="window.print()">Print</button>
+    </form>
+
+</div>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>CNPJ</th>
+            <th>Address</th>
+            <th>Zip Code</th>
+            <th>Created At</th>
+            <th>QR Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var supplier in Model)
+        {
+            <tr>
+                <td>@supplier.Name</td>
+                <td>@supplier.CNPJ</td>
+                <td>@supplier.Address</td>
+                <td>@supplier.ZipCode</td>
+                <td>@supplier.CreatedAt.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <!-- Garanta que o QRCode e o texto estejam centralizados -->
+                    <div style="display: flex; flex-direction: column; align-items: start;">
+                        <div id="qrcode-@supplier.Id"></div>
+                        <div style="margin-top: 10px; text-align: center;">
+                            <span>@supplier.QRCode</span>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        var qrcode = new QRCode(document.getElementById("qrcode-@supplier.Id"), {
+                            text: "@supplier.QRCode", // Texto para o QRCode
+                            width: 128,               // Largura do QRCode
+                            height: 128,              // Altura do QRCode
+                            colorDark: "#000000",    // Cor escura
+                            colorLight: "#ffffff",   // Cor clara
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    </script>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

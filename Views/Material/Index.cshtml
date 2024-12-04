@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Material>
+
+@{
+    ViewData["Title"] = "Material List";
+}
+
+<h1>Material List</h1>
+
+<a class="btn btn-primary" asp-action="Create">Add New Material</a>
+
+<div
+<form method="get" class="form-inline mb-3">
+    <div class="form-group ">
+        <label for="Name">Name:</label>
+        <input type="text" name="Name" class="form-control ml-2" />
+    </div>
+    <div class="form-group ml-3">
+        <label for="CreatedAt">Created At:</label>
+        <input type="date" name="CreatedAt" class="form-control ml-2" />
+    </div>
+    <button type="submit" class="btn btn-secondary mt-3">Filter</button>
+</form>
+<button class="btn btn-secondary mt-3" onclick="window.print()">Print</button>
+</div>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Fiscal Code</th>
+            <th>Specie</th>
+            <th>Created At</th>
+            <th>Supplier QR Code</th>
+        </tr>
+    </thead>
+    <tbody>
+         @*@foreach (var material in Model)
+        {
+        <tr>
+        <td>@material.Code</td>
+        <td>@material.Name</td>
+        <td>@material.Description</td>
+        <td>@material.FiscalCode</td>
+        <td>@material.Specie</td>
+        <td>@material?.CreatedAt.ToString("dd/MM/yyyy")</td>
+        <td>@material.Supplier?.QRCode</td>
+        </tr>
+        }*@
+    </tbody>
+</table>
