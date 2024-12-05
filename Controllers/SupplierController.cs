@@ -11,11 +11,6 @@ namespace Product_Supplier_Registration.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            var suppliers = _context.Suppliers.ToList();
-            return View(suppliers);
-        }
 
         [HttpPost]
         public IActionResult Create(Supplier supplier)
@@ -25,6 +20,30 @@ namespace Product_Supplier_Registration.Controllers
             _context.Suppliers.Add(supplier);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Index(string name, DateTime? createdAt)
+        {
+            var query = _context.Suppliers.AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(s => s.Name.Contains(name));
+            }
+
+            if (createdAt.HasValue)
+            {
+                query = query.Where(s => s.CreatedAt.Date == createdAt.Value.Date);
+            }
+
+            var suppliers = query.ToList();
+
+            // Mantém os valores dos filtros na ViewData para persistência no front-end
+            ViewData["Name"] = name;
+            ViewData["CreatedAt"] = createdAt?.ToString("yyyy-MM-dd");
+
+            return View(suppliers);
         }
     }
 

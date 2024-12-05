@@ -13,9 +13,8 @@
 
         public string GenerateQRCode()
         {
-            return QRCode.Replace("%CNPJ%", CNPJ)
-                         .Replace("%CEP%", ZipCode)
-                         .Replace("%DATACADASTRO%", CreatedAt.ToString("dd/MM/yyyy"));
+            QRCode = "";
+            return QRCode+$"{CNPJ} - {ZipCode}";
         }
     }
 }
