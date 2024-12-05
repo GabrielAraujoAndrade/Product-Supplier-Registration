@@ -15,9 +15,10 @@ public class MyDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Material>()
-            .HasOne(m => m.Supplier)
-            .WithMany()  // Assumindo que Supplier pode ter muitos Materials
-            .HasForeignKey(m => m.IdSupplier)  // Relacionamento com a chave estrangeira
-            .OnDelete(DeleteBehavior.Restrict);  // Ou use outro comportamento de exclusão
+            .HasOne<Supplier>() // Sem incluir a propriedade de navegação
+            .WithMany()
+            .HasForeignKey(m => m.IdSupplier)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
+

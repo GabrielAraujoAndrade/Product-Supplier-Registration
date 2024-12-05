@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Product_Supplier_Registration.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace Product_Supplier_Registration.Controllers
 {
     public class SupplierController : Controller
     {
         private readonly MyDbContext _context;
+        
 
         public SupplierController(MyDbContext context)
         {
             _context = context;
+            
         }
+
 
 
         [HttpPost]
@@ -24,8 +29,9 @@ namespace Product_Supplier_Registration.Controllers
 
         [HttpGet]
         public IActionResult Index(string name, DateTime? createdAt)
-        {
+        {       
             var query = _context.Suppliers.AsQueryable();
+      
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -41,7 +47,7 @@ namespace Product_Supplier_Registration.Controllers
 
             // Mantém os valores dos filtros na ViewData para persistência no front-end
             ViewData["Name"] = name;
-            ViewData["CreatedAt"] = createdAt?.ToString("yyyy-MM-dd");
+            ViewData["CreatedAt"] = createdAt?.ToString("dd-MM-yyyy");
 
             return View(suppliers);
         }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Product_Supplier_Registration.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Xml.Linq;
 
 namespace Product_Supplier_Registration.Controllers
 {
@@ -15,49 +17,58 @@ namespace Product_Supplier_Registration.Controllers
 
         public IActionResult Index(string Name, DateTime? CreatedAt)
         {
-            // Inicia a consulta com todos os materiais
-            var materialsQuery = _context.Materials.Include(m => m.Supplier).AsQueryable();
-
-            // Filtra por nome, se fornecido
+          
+                var materialsQuery = _context.Materials.AsQueryable();
             if (!string.IsNullOrEmpty(Name))
-            {
-                materialsQuery = materialsQuery.Where(m => m.Name.Contains(Name));
-            }
+                {
+                    materialsQuery = materialsQuery.Where(m => m.Name.Contains(Name));
+                }
 
-            // Filtra por data de criação, se fornecida
-            if (CreatedAt.HasValue)
-            {
-                materialsQuery = materialsQuery.Where(m => m.CreatedAt.Date == CreatedAt.Value.Date);
-            }
+                if (CreatedAt.HasValue)
+                {
+                    materialsQuery = materialsQuery.Where(m => m.CreatedAt.Date == CreatedAt.Value.Date);
+                }
+
+            ViewData["Name"] = Name;
+            ViewData["CreatedAt"] = CreatedAt?.ToString("dd-MM-yyyy");
+
 
             var materials = materialsQuery
-                .Select(m => new
+                    .Select(m => new
+                    {
+                        m.Code,
+                        m.Name,
+                        m.Description,
+                        m.FiscalCode,
+                        m.Specie,
+                        m.IdSupplier,
+                        CreatedAt = m.CreatedAt.ToString("dd/MM/yyyy"),
+                        SupplierQRCode = _context.Suppliers
+                            .Where(s => s.Id == m.IdSupplier)
+                            .Select(s => s.QRCode)
+                            .FirstOrDefault()
+                    })
+                    .ToList();
+
+                var viewModel = materials.Select(m => new Material
                 {
-                    m.Code,
-                    m.Name,
-                    m.Description,
-                    m.FiscalCode,
-                    m.Specie,
-                    m.Supplier,
-                    CreatedAt = m.CreatedAt.ToString("dd/MM/yyyy"),
-                    SupplierQRCode = m.Supplier != null ? m.Supplier.QRCode : "No QR Code"
-                })
-                .ToList();
+                    Code = m.Code,
+                    Name = m.Name,
+                    Description = m.Description,
+                    FiscalCode = m.FiscalCode,
+                    Specie = m.Specie,
+                    IdSupplier = m.IdSupplier,
+                    CreatedAt = DateTime.Parse(m.CreatedAt),
+                    UpdatedAt = null,
+                    UpdatedBy = null,
+                    CreatedBy = "",
+                    SupplierQRCode = m.SupplierQRCode
+                }).ToList();
 
-            // Mapeia para a view esperada:
-            var viewModel = materials.Select(m => new Material
-            {
-                Code = m.Code,
-                Name = m.Name,
-                Description = m.Description,
-                FiscalCode = m.FiscalCode,
-                Specie = m.Specie,
-                Supplier = m.Supplier,
-                CreatedAt = DateTime.Parse(m.CreatedAt)
-            }).ToList();
+                return View(viewModel);
+            }
 
-            return View(viewModel);
-        }
+        
         [HttpGet]
         public IActionResult Create()
         {
@@ -65,15 +76,24 @@ namespace Product_Supplier_Registration.Controllers
             ViewBag.Suppliers = _context.Suppliers.ToList();
             return View();
         }
-
         [HttpPost]
         public IActionResult Create(Material material)
         {
+            var supplierExists = _context.Suppliers.Any(s => s.Id == material.IdSupplier);
+            if (!supplierExists)
+            {
+                TempData["SupplierError"] = "O ID do fornecedor não existe.";
+                return RedirectToAction("Index");
+            }
+            material.CreatedBy = "root";
             material.CreatedAt = DateTime.Now;
             _context.Materials.Add(material);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
+
+     
 
     }
 }
