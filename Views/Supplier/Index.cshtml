@@ -11,11 +11,10 @@
 
 <h1>Supplier List</h1>
 
-<!-- Botão para abrir o modal -->
+
 <a class="btn btn-primary" data-toggle="modal" data-target="#forms">Add a new supplier</a>
 
 <div class="container">
-    <!-- Modal -->
     <div class="modal fade" id="forms" tabindex="-1" role="dialog" aria-labelledby="formsLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -26,7 +25,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Formulário para adicionar um novo supplier -->
+            
                     <form method="post" action="@Url.Action("Create", "Supplier")">
                         <div class="form-group">
                             <label for="Name">Name</label>
@@ -113,7 +112,7 @@
                 <td>@supplier.ZipCode</td>
                 <td>@supplier.CreatedAt.ToString("dd/MM/yyyy")</td>
                 <td>
-                    <!-- QR Code -->
+                 
                     <div style="display: flex; flex-direction: column; align-items: start;">
                         <div id="qrcode-@supplier.Id"></div>
                         <div style="margin-top: 10px; text-align: start;">
