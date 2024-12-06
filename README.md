@@ -11,7 +11,7 @@ Este projeto tem como objetivo fornecer um sistema para o gerenciamento de mater
 - ORM: MySql.EntityFrameworkCore
 - Frontend: HTML, CSS, JavaScript, com integração de alguns scripts em C#
 # Descrição
-O sistema foi desenvolvido utilizando o framework .NET para o backend, com uma conexão ao banco de dados MySQL através do pacote MySql.EntityFrameworkCore. A arquitetura do projeto foi dividida em camadas, com foco na manutenção e escalabilidade. O frontend foi implementado utilizando HTML e CSS, com JavaScript para funcionalidades dinâmicas, mas também foram utilizados scripts em C# para algumas interações devido ao meu maior conhecimento nesta linguagem.
+O sistema foi desenvolvido utilizando o framework .NET para o backend, com uma conexão ao banco de dados MySQL através do pacote MySql.EntityFrameworkCore. A arquitetura do projeto foi dividida em camadas, com foco na manutenção e escalabilidade. O frontend foi implementado utilizando HTML e CSS, com JavaScript para funcionalidades dinâmicas, mas também foram utilizados estruturas de repetção em C# para algumas interações devido ao meu maior conhecimento nesta linguagem.
 
 # Funcionalidades
 - Cadastro de materiais
