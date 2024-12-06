@@ -45,7 +45,7 @@ namespace Product_Supplier_Registration.Controllers
 
             var suppliers = query.ToList();
 
-            // Mantém os valores dos filtros na ViewData para persistência no front-end
+
             ViewData["Name"] = name;
             ViewData["CreatedAt"] = createdAt?.ToString("dd-MM-yyyy");
 
