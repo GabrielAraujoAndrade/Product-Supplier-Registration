@@ -72,7 +72,6 @@ namespace Product_Supplier_Registration.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            // Carregar todos os fornecedores para preencher o dropdown
             ViewBag.Suppliers = _context.Suppliers.ToList();
             return View();
         }
